@@ -1,4 +1,6 @@
-# vue_crash_todolist
+# jbehave job tracker js
+
+This project is meant to help people trying to make jbehave jobs
 
 ## Project setup
 ```
