@@ -1,0 +1,50 @@
+<template>
+    <div v-if="currentJob">
+        <div v-bind:key="currentJob.id">
+            <CurrentItem
+                v-bind:jobQueueItem="currentJob"
+                v-on:extend-job="$emit('extend-job', currentJob)"
+                v-on:del-current-job="$emit('del-current-job', currentJob.id)"
+            />
+        </div>
+        <h1>
+            Next in Queue (max 10)
+        </h1>
+        <div v-for="jobQueueItem in jobQueue" v-bind:key="jobQueueItem.id">
+            <JobQueueItem v-bind:jobQueueItem="jobQueueItem" v-on:del-job="$emit('del-job', jobQueueItem.id)" />
+        </div>
+    </div>
+    <div v-else>
+        <h1>
+            There is currently no job
+        </h1>
+    </div>  
+</template>
+
+<script>
+import JobQueueItem from './JobQueueItem.vue';
+import CurrentItem from './CurrentJob.vue';
+
+export default {
+    name: "JobQueue",
+    props: [
+        /**
+         * The current job item
+         */
+        "currentJob",
+
+        /**
+         * The other items in the queue
+         */
+        "jobQueue",
+    ],
+    components: {
+        JobQueueItem,
+        CurrentItem
+    },
+}
+</script>
+
+<style scoped>
+
+</style>
