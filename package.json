@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "deploy": "sh deploy.sh"
+    "deploy": "sh deploy.sh",
+    "perm-mod": "sudo chown -c -R $USER:$USER $HOME"
   },
   "dependencies": {
     "axios": "^0.20.0",
