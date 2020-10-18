@@ -53,7 +53,7 @@ export default {
         .catch(err => alert(err));
     },
     deleteCurrentJob(id) {
-      axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}`)
+      axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current`)
         .then(() => {
           this.currentItem = this.jobQueue.shift();
           // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
@@ -107,22 +107,29 @@ export default {
 
       // member.complete = new Date(this.jobQueue[this.jobQueue - 1].complete);
 
-      axios.post('https://secure-retreat-15328.herokuapp.com/add/', {
+      axios.post(`https://secure-retreat-15328.herokuapp.com/add/${title}`, {
         title
       })
         .then(res => {
           //  replace this when db is up and running.
           // const data = res.data;
-          if (this.currentItem){
-            this.jobQueue = [...this.jobQueue, res.data];
-          }
-          else {
-            this.currentItem = res.data;
+          var jobArr = res.data.jobs;
+          if (jobArr.length > 0){
+            if (this.currentItem && this.currentItem === jobArr[0]){
+              
+              // var jobArrLen = jobArr.len
+              this.jobQueue = [res.data.jobs];
+            }
+            else if (this.currentItem && this.currentItem !== jobArr[0]) {
+              this.currentItem = jobArr.shift();
+              this.jobQueue = jobArr;
+            }
+            else {
+              this.currentItem = jobArr[0];
+            }
           }
         })
         .catch(err => alert(err));
-
-      // this.todos = [...this.todos, newTodos]
     },
   },
   /**
@@ -132,8 +139,10 @@ export default {
     //  get jobs
     axios.get('https://secure-retreat-15328.herokuapp.com/jobs')
       .then(res => {
-        this.currentItem = res.data.jobs.shift();
-        this.jobQueue = res.data.jobs;
+        if (res.data.jobs){
+          this.currentItem = res.data.jobs.shift();
+          this.jobQueue = res.data.jobs;
+        }
       })
       .catch(err => alert(err));
     

@@ -1,5 +1,5 @@
 <template>
-    <div v-if="currentJob">
+    <div v-if="currentJob.ID">
         <div v-bind:key="currentJob.ID">
             <CurrentItem
                 v-bind:jobQueueItem="currentJob"
