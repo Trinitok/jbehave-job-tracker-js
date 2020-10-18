@@ -53,7 +53,7 @@ export default {
         .catch(err => alert(err));
     },
     deleteCurrentJob(id) {
-      axios.delete(`https://my-json-server.typicode.com/Trinitok/test-job-json/jobs/${id}`)
+      axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}`)
         .then(() => {
           this.currentItem = this.jobQueue.shift();
           // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
@@ -62,7 +62,7 @@ export default {
       // this.todos = this.todos.filter(todo => todo.id !== id);
     },
     deleteJob(id) {
-      axios.delete(`https://my-json-server.typicode.com/Trinitok/test-job-json/jobs/${id}`)
+      axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}`)
         .then(() => {
           this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
@@ -84,7 +84,7 @@ export default {
       //  add 2 hours
       //  set that as the new job complete
       var title = member.title;
-      var complete = newJobCompleteDate;
+      // var complete = newJobCompleteDate;
       if (this.jobQueue.length > 0) {
         
       
@@ -102,13 +102,12 @@ export default {
         title = member.title;
         var completeDate = new Date();
         completeDate.setHours(completeDate.getHours() + 2);
-        complete = completeDate;
+        // complete = completeDate;
       }
 
       // member.complete = new Date(this.jobQueue[this.jobQueue - 1].complete);
 
-      axios.post('https://my-json-server.typicode.com/Trinitok/test-job-json/jobs', {
-        complete,
+      axios.post('https://secure-retreat-15328.herokuapp.com/add/', {
         title
       })
         .then(res => {
@@ -131,19 +130,23 @@ export default {
    */
   created() {
     //  get jobs
-    axios.get('https://my-json-server.typicode.com/Trinitok/test-job-json/jobs?_limit=5')
+    axios.get('https://secure-retreat-15328.herokuapp.com/jobs')
       .then(res => {
-        this.currentItem = res.data.shift();
-        this.jobQueue = res.data;
+        this.currentItem = res.data.jobs.shift();
+        this.jobQueue = res.data.jobs;
       })
       .catch(err => alert(err));
     
     //  get members
-    axios.get('https://my-json-server.typicode.com/Trinitok/test-job-json/people')
+    axios.get('https://secure-retreat-15328.herokuapp.com/people')
       .then(res => {
         this.members = res.data;
       })
-      .catch(err => alert(err));
+      .catch(err => {
+        alert(err);
+        console.log('there was an error');
+        console.log(err);
+      });
   },
 }
 </script>

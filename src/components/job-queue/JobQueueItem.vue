@@ -3,7 +3,7 @@
         
         <p>
             {{ jobQueueItem.title }}
-            <button @click="$emit('del-job', jobQueueItem.id)" class="del">x
+            <button @click="$emit('del-job', jobQueueItem.ID)" class="del">x
             </button>
         </p>
     </div>

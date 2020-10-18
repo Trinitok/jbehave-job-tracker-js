@@ -3,7 +3,7 @@
         <h1>
             Members
         </h1>
-        <div v-for="member in members" v-bind:key="member.id">
+        <div v-for="member in members.people" v-bind:key="member.ID">
             <Member v-bind:member="member" v-on:queue-job="$emit('queue-job', member)" />
         </div>
     </div>    

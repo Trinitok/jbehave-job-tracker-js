@@ -1,3 +1,6 @@
 module.exports = {
-    publicPath: '/jbehave-job-tracker-js/'
+    publicPath: process.env.NODE_ENV === 'production' ? '/jbehave-job-tracker-js/' : '/',
+    devServer: {
+        proxy: 'http://localhost:5000'
+    }
 }

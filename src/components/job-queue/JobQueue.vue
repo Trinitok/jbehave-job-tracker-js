@@ -1,17 +1,17 @@
 <template>
     <div v-if="currentJob">
-        <div v-bind:key="currentJob.id">
+        <div v-bind:key="currentJob.ID">
             <CurrentItem
                 v-bind:jobQueueItem="currentJob"
                 v-on:extend-job="$emit('extend-job', currentJob)"
-                v-on:del-current-job="$emit('del-current-job', currentJob.id)"
+                v-on:del-current-job="$emit('del-current-job', currentJob.ID)"
             />
         </div>
         <h1>
             Next in Queue (max 10)
         </h1>
-        <div v-for="jobQueueItem in jobQueue" v-bind:key="jobQueueItem.id">
-            <JobQueueItem v-bind:jobQueueItem="jobQueueItem" v-on:del-job="$emit('del-job', jobQueueItem.id)" />
+        <div v-for="jobQueueItem in jobQueue" v-bind:key="jobQueueItem.ID">
+            <JobQueueItem v-bind:jobQueueItem="jobQueueItem" v-on:del-job="$emit('del-job', jobQueueItem.ID)" />
         </div>
     </div>
     <div v-else>
