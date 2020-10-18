@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/jbehave-job-tracker/'
+    publicPath: '/jbehave-job-tracker-js/'
 }
