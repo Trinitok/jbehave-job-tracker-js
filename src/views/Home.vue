@@ -1,7 +1,14 @@
 <template>
   <div id="app">
     <!-- <AddJob v-on:add-job-to-queue="addJob" /> -->
-    <JobQueue v-bind:currentJob="currentItem" v-bind:jobQueue="jobQueue" v-on:extend-job="extendJob" v-on:del-job="deleteJob" v-on:del-current-job="deleteCurrentJob" />
+    <JobQueue 
+      v-bind:currentJob="currentItem"
+      v-bind:jobQueue="jobQueue"
+      v-on:extend-job="extendJob"
+      v-on:del-job="deleteJob"
+      v-on:del-current-job="deleteCurrentJob"
+      v-on:job-finished="deleteJob"
+    />
     <Members v-bind:members="members" v-on:queue-job="addJob" />
   </div>
 </template>
@@ -42,15 +49,26 @@ export default {
       date.setMinutes(date.getMinutes() + 15);
       const complete = date;
       const title = item.title;
-      axios.put(`https://my-json-server.typicode.com/Trinitok/test-job-json/jobs/${item.id}`, {
+      axios.put(`https://secure-retreat-15328.herokuapp.com/jobs/${item.ID}`, {
         complete,
         title
       })
         .then(res => {
-          this.currentItem = res.data;
+          const jobs = res.data.jobs;
+          this.currentItem = jobs.shift();
+          this.jobQueue = jobs;
           // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
         .catch(err => alert(err));
+    },
+    deleteCurrentJobCompleted(id) {
+      axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current/complete`)
+        .then(() => {
+          this.currentItem = this.jobQueue.shift();
+          // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
+        })
+        .catch(err => alert(err));
+      // this.todos = this.todos.filter(todo => todo.id !== id);
     },
     deleteCurrentJob(id) {
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current`)

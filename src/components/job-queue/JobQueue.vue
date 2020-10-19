@@ -5,6 +5,7 @@
                 v-bind:jobQueueItem="currentJob"
                 v-on:extend-job="$emit('extend-job', currentJob)"
                 v-on:del-current-job="$emit('del-current-job', currentJob.ID)"
+                v-on:job-finished="$emit('job-finished', jobQueueItem.ID)"
             />
         </div>
         <h1>

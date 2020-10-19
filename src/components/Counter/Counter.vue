@@ -88,13 +88,15 @@ export default {
         },
         showRemaining() {
             const timer = setInterval(() => {
-                // this.assignTimeValues();
                 const now = new Date();
-                // const end = new Date(2020, 11, 24, 10, 10, 10);
-                const distance = this.end.getTime() - now.getTime();
+                const nowUtcStrLen = now.toUTCString().length;
+                const dateNoGMT = now.toUTCString().slice(0, nowUtcStrLen - 4);
+                const convertedDate = new Date(dateNoGMT);
+                const distance = this.end.getTime() - convertedDate.getTime();
 
                 if (distance < 0) {
                     clearInterval(timer);
+                    this.$emit('job-finished')
                     return;
                 }
 

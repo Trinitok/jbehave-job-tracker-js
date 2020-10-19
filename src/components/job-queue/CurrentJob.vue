@@ -13,6 +13,7 @@
                 :minute='10'
                 :second='5'
                 :millisecond='0'
+                v-on:job-finished="$emit('job-finished', jobQueueItem.ID)"
             />
         </div>
         
@@ -21,7 +22,7 @@
                 Extend Job
             </button>
             {{ jobQueueItem.title }}
-            <button @click="$emit('del-current-job', jobQueueItem.id)" class="del">
+            <button @click="$emit('del-current-job', jobQueueItem.ID)" class="del">
                 x
             </button>
         </p>
