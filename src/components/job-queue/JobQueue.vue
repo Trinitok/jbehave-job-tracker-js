@@ -43,6 +43,9 @@ export default {
         JobQueueItem,
         CurrentItem
     },
+    computed() {
+        console.log(this.currentJob);
+    }
 }
 </script>
 

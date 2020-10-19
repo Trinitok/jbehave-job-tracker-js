@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- <AddJob v-on:add-job-to-queue="addJob" /> -->
+    <div v-if="currentItem">
     <JobQueue 
       v-bind:currentJob="currentItem"
       v-bind:jobQueue="jobQueue"
@@ -9,6 +10,12 @@
       v-on:del-current-job="deleteCurrentJob"
       v-on:job-finished="deleteJob"
     />
+    </div>
+    <div v-else>
+      <h1>
+            There is currently no job
+        </h1>
+    </div>
     <Members v-bind:members="members" v-on:queue-job="addJob" />
   </div>
 </template>
@@ -63,8 +70,13 @@ export default {
     },
     deleteCurrentJobCompleted(id) {
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current/complete`)
-        .then(() => {
-          this.currentItem = this.jobQueue.shift();
+        .then(res => {
+          const jobs = res.data.jobs;
+          if (jobs) {
+            this.currentItem = this.jobQueue.shift();
+          } else {
+            this.currentItem = undefined;
+          }
           // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
         .catch(err => alert(err));
@@ -73,7 +85,12 @@ export default {
     deleteCurrentJob(id) {
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current`)
         .then(() => {
-          this.currentItem = this.jobQueue.shift();
+          if (this.jobQueue && this.jobQueue.length > 0){
+            this.currentItem = this.jobQueue.shift();
+          }
+          else {
+            this.currentItem = undefined;
+          }
           // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
         .catch(err => alert(err));
@@ -171,8 +188,6 @@ export default {
       })
       .catch(err => {
         alert(err);
-        console.log('there was an error');
-        console.log(err);
       });
   },
 }
