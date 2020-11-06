@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["about"],{f820:function(t,e,n){"use strict";n.r(e);var a=function(){var t=this,e=t.$createElement;t._self._c;return t._m(0)},i=[function(){var t=this,e=t.$createElement,n=t._self._c||e;return n("div",{staticClass:"about"},[n("h1",[t._v("README")]),n("p",[t._v(" This application is meant to show the wait time for running Jbehave tests within the oneap team ")])])}],s=n("2877"),o={},r=Object(s["a"])(o,a,i,!1,null,null,null);e["default"]=r.exports}}]);
+//# sourceMappingURL=about.68dd9ba5.js.map
