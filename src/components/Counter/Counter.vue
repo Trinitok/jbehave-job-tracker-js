@@ -96,7 +96,7 @@ export default {
 
                 if (distance < 0) {
                     clearInterval(timer);
-                    this.$emit('job-finished')
+                    this.$emit('job-finished');
                     return;
                 }
 

@@ -1,22 +1,25 @@
 <template>
   <div id="app">
     <!-- <AddJob v-on:add-job-to-queue="addJob" /> -->
-    <div v-if="currentItem">
-    <JobQueue 
-      v-bind:currentJob="currentItem"
-      v-bind:jobQueue="jobQueue"
-      v-on:extend-job="extendJob"
-      v-on:del-job="deleteJob"
-      v-on:del-current-job="deleteCurrentJob"
-      v-on:job-finished="deleteJob"
-    />
-    </div>
-    <div v-else>
-      <h1>
-            There is currently no job
+      <div v-if="currentItem">
+        <JobQueue
+          v-bind:currentJob="currentItem"
+          v-bind:jobQueue="jobQueue"
+          v-on:extend-job="extendJob"
+          v-on:del-job="deleteJob"
+          v-on:del-current-job="deleteCurrentJob"
+          v-on:job-finished="deleteJob"
+        />
+      </div>
+      <div v-else>
+        <h1>
+          There is currently no job
         </h1>
-    </div>
-    <Members v-bind:members="members" v-on:queue-job="addJob" />
+      </div>
+      <Members
+        v-bind:members="members"
+        v-on:queue-job="addJob"
+      />
   </div>
 </template>
 
@@ -42,7 +45,6 @@ export default {
       jobQueue: [
       ],
       members: [
-
       ],
     }
   },
@@ -51,11 +53,18 @@ export default {
    * https://my-json-server.typicode.com/Trinitok/test-job-json/jobs
    */
   methods: {
+    isLoading() {
+      this.loader.val = true;
+    },
+    isLoaded() {
+      this.loader.val = false;
+    },
     extendJob(item) {
       var date = new Date(item.complete);
       date.setMinutes(date.getMinutes() + 15);
       const complete = date;
       const title = item.title;
+      this.isLoading();
       axios.put(`https://secure-retreat-15328.herokuapp.com/jobs/${item.ID}`, {
         complete,
         title
@@ -64,11 +73,14 @@ export default {
           const jobs = res.data.jobs;
           this.currentItem = jobs.shift();
           this.jobQueue = jobs;
-          // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
-        .catch(err => alert(err));
+        .catch(err => alert(err))
+        .finally(() => {
+          this.isLoaded();
+        });
     },
     deleteCurrentJobCompleted(id) {
+      this.isLoading();
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current/complete`)
         .then(res => {
           const jobs = res.data.jobs;
@@ -77,12 +89,14 @@ export default {
           } else {
             this.currentItem = undefined;
           }
-          // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
-        .catch(err => alert(err));
-      // this.todos = this.todos.filter(todo => todo.id !== id);
+        .catch(err => alert(err))
+        .finally(() => {
+          this.isLoaded();
+        });
     },
     deleteCurrentJob(id) {
+      this.isLoading();
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}/current`)
         .then(() => {
           if (this.jobQueue && this.jobQueue.length > 0){
@@ -91,18 +105,22 @@ export default {
           else {
             this.currentItem = undefined;
           }
-          // this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
         })
-        .catch(err => alert(err));
-      // this.todos = this.todos.filter(todo => todo.id !== id);
+        .catch(err => alert(err))
+        .finally(() => {
+          this.isLoaded();
+        });
     },
     deleteJob(id) {
+      this.isLoading();
       axios.delete(`https://secure-retreat-15328.herokuapp.com/jobs/${id}`)
         .then(() => {
-          this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.id !== id);
+          this.jobQueue = this.jobQueue.filter(jobQueueItem => jobQueueItem.ID !== id);
         })
-        .catch(err => alert(err));
-      // this.todos = this.todos.filter(todo => todo.id !== id);
+        .catch(err => alert(err))
+        .finally(() => {
+          this.isLoaded();
+        });
     },
     /**
      * Adds a job to hte queue.  If there are already at least 10 jobs an alert will appear
@@ -142,6 +160,7 @@ export default {
 
       // member.complete = new Date(this.jobQueue[this.jobQueue - 1].complete);
 
+      this.isLoading();
       axios.post(`https://secure-retreat-15328.herokuapp.com/add/${title}`, {
         title
       })
@@ -164,7 +183,10 @@ export default {
             }
           }
         })
-        .catch(err => alert(err));
+        .catch(err => alert(err))
+        .finally(() => {
+          this.isLoaded();
+        });
     },
   },
   /**
@@ -188,8 +210,14 @@ export default {
       })
       .catch(err => {
         alert(err);
+      })
+      .finally(() => {
+        this.isLoaded();
       });
   },
+  inject: [
+    "loader"
+  ],
 }
 </script>
 
