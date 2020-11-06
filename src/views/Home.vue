@@ -125,8 +125,7 @@ export default {
     /**
      * Adds a job to hte queue.  If there are already at least 10 jobs an alert will appear
      */
-    addJob(member) {
-      
+    addJob(member) {      
       if (this.jobQueue.length >= 10) {
         alert('The max queue size is 10 jobs');
         return;
@@ -171,7 +170,6 @@ export default {
           if (jobArr.length > 0){
             if (this.currentItem && this.currentItem === jobArr[0]){
               
-              // var jobArrLen = jobArr.len
               this.jobQueue = [res.data.jobs];
             }
             else if (this.currentItem && this.currentItem !== jobArr[0]) {
@@ -183,7 +181,7 @@ export default {
             }
           }
         })
-        .catch(err => alert(err))
+        .catch(err => console.log(err))
         .finally(() => {
           this.isLoaded();
         });
